@@ -57,7 +57,7 @@ class OnnxruntimeAT1244 < Formula
   patch :DATA
 
   def install
-    python3 = which("python3.11")
+    python3 = Formula["python@3.11"].opt_bin/"python3.11"
 
     resources.each do |r|
       (buildpath/"build/_deps/#{r.name}-src").install r
