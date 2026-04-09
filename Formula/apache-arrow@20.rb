@@ -5,6 +5,12 @@ class ApacheArrowAT20 < Formula
   sha256 "67e31a4f46528634b8c3cbb0dc60ac8f85859d906b400d83d0b6f732b0c5b0e3"
   license "Apache-2.0"
 
+  bottle do
+    root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/apache-arrow@20-20.0.0"
+    sha256 cellar: :any, arm64_tahoe:  "74811c4560027d264758c11ff1a2b441af87459aa922f34e962da3701d0da985"
+    sha256               x86_64_linux: "40ada9c91b2eaa0c2d2ed35680a2c76738d429cb762a8f262340b9f185d341d0"
+  end
+
   keg_only :versioned_formula
 
   depends_on "boost" => :build
