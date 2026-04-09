@@ -15,6 +15,8 @@ class KaitoTokyoPythonAT311 < Formula
   # build packages later. Xcode-only systems need different flags.
   pour_bottle? only_if: :clt_installed
 
+  keg_only :versioned_formula
+
   depends_on "pkgconf" => :build
   depends_on "mpdecimal"
   depends_on "openssl@3"
@@ -373,11 +375,6 @@ class KaitoTokyoPythonAT311 < Formula
     }.each do |short_name, long_name|
       (libexec/"bin").install_symlink (bin/long_name).realpath => short_name
     end
-
-    # post_install happens after link
-    %W[wheel#{version.major_minor} pip#{version.major_minor}].each do |e|
-      (HOMEBREW_PREFIX/"bin").install_symlink bin/e
-    end
   end
 
   def sitecustomize
@@ -435,37 +432,6 @@ class KaitoTokyoPythonAT311 < Formula
           if os.path.isdir(split_prefix):
               sys.path.append(split_prefix)
     PYTHON
-  end
-
-  def caveats
-    <<~EOS
-      Python is installed as
-        #{HOMEBREW_PREFIX}/bin/python#{version.major_minor}
-
-      Unversioned and major-versioned symlinks `python`, `python3`, `python-config`, `python3-config`, `pip`, `pip3`, etc. pointing to
-      `python#{version.major_minor}`, `python#{version.major_minor}-config`, `pip#{version.major_minor}` etc., respectively, are installed into
-        #{opt_libexec}/bin
-
-      You can install Python packages with
-        pip#{version.major_minor} install <package>
-      They will install into the site-package directory
-        #{HOMEBREW_PREFIX}/lib/python#{version.major_minor}/site-packages
-
-      `idle#{version.major_minor}` requires tkinter, which is available separately:
-        brew install python-tk@#{version.major_minor}
-
-      gdbm (`dbm.gnu`) is no longer included in this formula, but it is available separately:
-        brew install python-gdbm@#{version.major_minor}
-      `dbm.ndbm` changed database backends in Homebrew Python 3.11.
-      If you need to read a database from a previous Homebrew Python created via `dbm.ndbm`,
-      you'll need to read your database using the older version of Homebrew Python and convert to another format.
-      `dbm` still defaults to `dbm.gnu` when it is installed.
-
-      If you do not need a specific version of Python, and always want Homebrew's `python3` in your PATH:
-        brew install python3
-
-      For more information about Homebrew and Python, see: https://docs.brew.sh/Homebrew-and-Python
-    EOS
   end
 
   test do
