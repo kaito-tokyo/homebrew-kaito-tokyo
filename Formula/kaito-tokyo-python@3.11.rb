@@ -4,7 +4,7 @@ class KaitoTokyoPythonAT311 < Formula
   url "https://www.python.org/ftp/python/3.11.15/Python-3.11.15.tgz"
   sha256 "f4de1b10bd6c70cbb9fa1cd71fc5038b832747a74ee59d599c69ce4846defb50"
   license "Python-2.0"
-  revision 1
+  revision 2
   compatibility_version 1
 
   bottle do
@@ -108,6 +108,12 @@ class KaitoTokyoPythonAT311 < Formula
   end
 
   def install
+    inreplace "Lib/sysconfig.py", "{base}/lib/python{py_version_short}/site-packages",
+"{base}/lib/kaito-tokyo-python{py_version_short}/site-packages", global: false
+    inreplace "Lib/sysconfig.py", "{platbase}/{platlibdir}/python{py_version_short}/site-packages",
+"{platbase}/{platlibdir}/kaito-tokyo-python{py_version_short}/site-packages", global: false
+    inreplace "Lib/sysconfig.py", "{base}/bin",
+"{installed_base}/bin", global: false
     inreplace "Lib/sysconfig.py", "#{HOMEBREW_PREFIX}/lib/python{py_version_short}/site-packages",
             "#{HOMEBREW_PREFIX}/lib/kaito-tokyo-python{py_version_short}/site-packages"
     inreplace "Lib/sysconfig.py", "#{HOMEBREW_PREFIX}/{platlibdir}/python{py_version_short}/site-packages",
