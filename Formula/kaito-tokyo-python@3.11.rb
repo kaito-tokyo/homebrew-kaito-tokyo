@@ -108,13 +108,11 @@ class KaitoTokyoPythonAT311 < Formula
   end
 
   def install
-    inreplace "Lib/sysconfig.py" do |s|
-      s.gsub! "#{HOMEBREW_PREFIX}/lib/python{py_version_short}/site-packages",
+    inreplace "Lib/sysconfig.py", "#{HOMEBREW_PREFIX}/lib/python{py_version_short}/site-packages",
             "#{HOMEBREW_PREFIX}/lib/kaito-tokyo-python{py_version_short}/site-packages"
-      s.gsub! "#{HOMEBREW_PREFIX}/{platlibdir}/python{py_version_short}/site-packages",
+    inreplace "Lib/sysconfig.py", "#{HOMEBREW_PREFIX}/{platlibdir}/python{py_version_short}/site-packages",
             "#{HOMEBREW_PREFIX}/{platlibdir}/kaito-tokyo-python{py_version_short}/site-packages"
-      s.gsub! "#{HOMEBREW_PREFIX}/bin", opt_bin.to_s
-    end
+    inreplace "Lib/sysconfig.py", "#{HOMEBREW_PREFIX}/bin", opt_bin.to_s
 
     # Unset these so that installing pip and setuptools puts them where we want
     # and not into some other Python the user has installed.
