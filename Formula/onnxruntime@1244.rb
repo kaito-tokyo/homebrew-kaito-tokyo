@@ -16,12 +16,12 @@ class OnnxruntimeAT1244 < Formula
   depends_on "howard-hinnant-date" => :build
   depends_on "nlohmann-json" => :build
   depends_on "pybind11" => :build
-  depends_on "python@3.11" => :build
   depends_on "safeint" => :build
   depends_on "abseil"
   depends_on "numpy"
   depends_on "onnx"
   depends_on "protobuf"
+  depends_on "python@3.11"
   depends_on "re2"
 
   resource "pytorch_cpuinfo" do
