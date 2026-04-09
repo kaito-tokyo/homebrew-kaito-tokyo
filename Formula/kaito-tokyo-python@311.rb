@@ -11,6 +11,13 @@ class KaitoTokyoPythonAT311 < Formula
     regex(%r{href=.*?v?(3\.11(?:\.\d+)*)/?["' >]}i)
   end
 
+  bottle do
+    root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/kaito-tokyo-python@311-3.11.15"
+    sha256 arm64_tahoe:  "e84f8f20e188d4ea4a840946335e8f2bd0ea01cff00dcb1fd2d49ad377193659"
+    sha256 sequoia:      "5deff5bd9db0046ca31f24a1ca0693e3f89c64af1030f814c7c4048e1beaedf1"
+    sha256 x86_64_linux: "0b44564dfd66e4febcf5f1acd1ac688926fdc7a59aa27b6beda871421ee4979d"
+  end
+
   # setuptools remembers the build flags python is built with and uses them to
   # build packages later. Xcode-only systems need different flags.
   pour_bottle? only_if: :clt_installed
