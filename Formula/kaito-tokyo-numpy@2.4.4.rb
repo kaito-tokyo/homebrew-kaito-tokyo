@@ -5,6 +5,12 @@ class KaitoTokyoNumpyAT244 < Formula
   sha256 "2d390634c5182175533585cc89f3608a4682ccb173cc9bb940b2881c8d6f8fa0"
   license "BSD-3-Clause"
 
+  bottle do
+    root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/kaito-tokyo-numpy@2.4.4-2.4.4"
+    sha256 cellar: :any,                 arm64_tahoe:  "eb8ff13823eaf43397d5fcc88321d117fd2d66aeb2feeb5844fa7f86edc2d154"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "cc9125c867e14651ce6789a7ac06196fd36732b1b545164bb8c7df780eb05d94"
+  end
+
   keg_only :versioned_formula
 
   depends_on "gcc" => :build
