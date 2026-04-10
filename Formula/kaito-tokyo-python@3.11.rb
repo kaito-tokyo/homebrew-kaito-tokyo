@@ -8,10 +8,10 @@ class KaitoTokyoPythonAT311 < Formula
   compatibility_version 1
 
   bottle do
-    root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/kaito-tokyo-python@3.11-3.11.15_2"
-    sha256 arm64_tahoe:  "76ea02f20be0132c7b187669bb0b9cce622232976711824ee25f00ade40adb59"
-    sha256 sequoia:      "b664ef5876b71e5aafcca52f292c49872d91ae852531a25d5c9e3cf2cea97585"
-    sha256 x86_64_linux: "21329eefb04cefa7052fb3062734349c32f856f4f1883994dc62d20ad942dade"
+    root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/kaito-tokyo-python@3.11-3.11.15_3"
+    sha256 arm64_tahoe:  "dc5b8d90109b0b5b870ce786a5b0cd10f66595e512939f236fd3716ffe241fd9"
+    sha256 sequoia:      "e974cf94e681d2328c54bc95348f358df8a46c888f7d52af5bcbbed3fb38a637"
+    sha256 x86_64_linux: "61da04b3e127e33dbb0b0c80a4b5e958e87fd9eedff2f0563584928b6c975880"
   end
 
   # setuptools remembers the build flags python is built with and uses them to
