@@ -4,7 +4,7 @@ class KaitoTokyoPythonAT311 < Formula
   url "https://www.python.org/ftp/python/3.11.15/Python-3.11.15.tgz"
   sha256 "f4de1b10bd6c70cbb9fa1cd71fc5038b832747a74ee59d599c69ce4846defb50"
   license "Python-2.0"
-  revision 2
+  revision 3
   compatibility_version 1
 
   bottle do
@@ -73,10 +73,11 @@ class KaitoTokyoPythonAT311 < Formula
   # Modify default sysconfig to match the brew install layout.
   # Remove when a non-patching mechanism is added (https://bugs.python.org/issue43976).
   # We (ab)use osx_framework_library to exploit pip behaviour to allow --prefix to still work.
-  patch do
-    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/python/3.11-sysconfig.diff"
-    sha256 "8bfe417c815da4ca2c0a2457ce7ef81bc9dae310e20e4fb36235901ea4be1658"
-  end
+  # patch do
+  #   url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/python/3.11-sysconfig.diff"
+  #   sha256 "8bfe417c815da4ca2c0a2457ce7ef81bc9dae310e20e4fb36235901ea4be1658"
+  # end
+  patch :DATA
 
   # Make bundled distutils look at preferred sysconfig scheme.
   # Remove with Python 3.12.
@@ -108,18 +109,6 @@ class KaitoTokyoPythonAT311 < Formula
   end
 
   def install
-    inreplace "Lib/sysconfig.py", "{base}/lib/python{py_version_short}/site-packages",
-"{base}/lib/kaito-tokyo-python{py_version_short}/site-packages", global: false
-    inreplace "Lib/sysconfig.py", "{platbase}/{platlibdir}/python{py_version_short}/site-packages",
-"{platbase}/{platlibdir}/kaito-tokyo-python{py_version_short}/site-packages", global: false
-    inreplace "Lib/sysconfig.py", "{base}/bin",
-"{installed_base}/bin", global: false
-    inreplace "Lib/sysconfig.py", "#{HOMEBREW_PREFIX}/lib/python{py_version_short}/site-packages",
-            "#{HOMEBREW_PREFIX}/lib/kaito-tokyo-python{py_version_short}/site-packages"
-    inreplace "Lib/sysconfig.py", "#{HOMEBREW_PREFIX}/{platlibdir}/python{py_version_short}/site-packages",
-            "#{HOMEBREW_PREFIX}/{platlibdir}/kaito-tokyo-python{py_version_short}/site-packages"
-    inreplace "Lib/sysconfig.py", "#{HOMEBREW_PREFIX}/bin", opt_bin.to_s
-
     # Unset these so that installing pip and setuptools puts them where we want
     # and not into some other Python the user has installed.
     ENV["PYTHONHOME"] = nil
@@ -490,3 +479,65 @@ class KaitoTokyoPythonAT311 < Formula
     system bin/"pip#{version.major_minor}", "list", "--format=columns"
   end
 end
+
+__END__
+diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
+index ebe37118274..4193878a36a 100644
+--- a/Lib/sysconfig.py
++++ b/Lib/sysconfig.py
+@@ -27,8 +27,8 @@
+     'posix_prefix': {
+         'stdlib': '{installed_base}/{platlibdir}/python{py_version_short}',
+         'platstdlib': '{platbase}/{platlibdir}/python{py_version_short}',
+-        'purelib': '{base}/lib/python{py_version_short}/site-packages',
+-        'platlib': '{platbase}/{platlibdir}/python{py_version_short}/site-packages',
++        'purelib': '{base}/lib/kaito-tokyo-python{py_version_short}/site-packages',
++        'platlib': '{platbase}/{platlibdir}/kaito-tokyo-python{py_version_short}/site-packages',
+         'include':
+             '{installed_base}/include/python{py_version_short}{abiflags}',
+         'platinclude':
+@@ -95,6 +95,18 @@
+         'scripts': '{base}/Scripts',
+         'data': '{base}',
+         },
++    'osx_framework_library': {
++        'stdlib': '{installed_base}/{platlibdir}/python{py_version_short}',
++        'platstdlib': '{platbase}/{platlibdir}/python{py_version_short}',
++        'purelib': '@@HOMEBREW_PREFIX@@/lib/kaito-tokyo-python{py_version_short}/site-packages',
++        'platlib': '@@HOMEBREW_PREFIX@@/{platlibdir}/kaito-tokyo-python{py_version_short}/site-packages',
++        'include':
++            '{installed_base}/include/python{py_version_short}{abiflags}',
++        'platinclude':
++            '{installed_platbase}/include/python{py_version_short}{abiflags}',
++        'scripts': '{base}/bin',
++        'data': '{base}',
++        },
+     }
+ 
+ # For the OS-native venv scheme, we essentially provide an alias:
+@@ -283,21 +295,22 @@ def _get_preferred_schemes():
+             'home': 'posix_home',
+             'user': 'nt_user',
+         }
++
+     if sys.platform == 'darwin' and sys._framework:
+         return {
+-            'prefix': 'posix_prefix',
++            'prefix': 'osx_framework_library',
+             'home': 'posix_home',
+             'user': 'osx_framework_user',
+         }
+     return {
+-        'prefix': 'posix_prefix',
++        'prefix': 'osx_framework_library',
+         'home': 'posix_home',
+         'user': 'posix_user',
+     }
+ 
+ 
+ def get_preferred_scheme(key):
+-    if key == 'prefix' and sys.prefix != sys.base_prefix:
++    if key == 'prefix' and (sys.prefix != sys.base_prefix or os.environ.get("ENSUREPIP_OPTIONS", None)):
+         return 'venv'
+     scheme = _get_preferred_schemes()[key]
+     if scheme not in _INSTALL_SCHEMES:
