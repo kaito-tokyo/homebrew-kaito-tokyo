@@ -23,6 +23,8 @@ jobs:
 
       - name: Set up git
         uses: Homebrew/actions/git-user-config@fc695c54c2032716dd4cedd007489c8e32fc8a5d # main
+        with:
+          username: github-actions[bot]
 
       - name: Pull bottles
         env:
