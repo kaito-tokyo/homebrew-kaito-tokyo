@@ -4,7 +4,7 @@ class KaitoTokyoPythonAT311 < Formula
   url "https://www.python.org/ftp/python/3.11.15/Python-3.11.15.tgz"
   sha256 "f4de1b10bd6c70cbb9fa1cd71fc5038b832747a74ee59d599c69ce4846defb50"
   license "Python-2.0"
-  revision 3
+  revision 4
   compatibility_version 1
 
   bottle do
@@ -317,6 +317,20 @@ class KaitoTokyoPythonAT311 < Formula
 
     # Write out sitecustomize.py
     (lib_cellar/"sitecustomize.py").atomic_write(sitecustomize)
+
+    # Install unversioned and major-versioned symlinks in libexec/bin.
+    {
+      "idle"           => "idle#{version.major_minor}",
+      "idle3"          => "idle#{version.major_minor}",
+      "pydoc"          => "pydoc#{version.major_minor}",
+      "pydoc3"         => "pydoc#{version.major_minor}",
+      "python"         => "python#{version.major_minor}",
+      "python3"        => "python#{version.major_minor}",
+      "python-config"  => "python#{version.major_minor}-config",
+      "python3-config" => "python#{version.major_minor}-config",
+    }.each do |short_name, long_name|
+      (libexec/"bin").install_symlink (bin/long_name).realpath => short_name
+    end
   end
 
   def post_install
