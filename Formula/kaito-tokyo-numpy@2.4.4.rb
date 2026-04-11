@@ -4,6 +4,7 @@ class KaitoTokyoNumpyAT244 < Formula
   url "https://files.pythonhosted.org/packages/d7/9f/b8cef5bffa569759033adda9481211426f12f53299629b410340795c2514/numpy-2.4.4.tar.gz"
   sha256 "2d390634c5182175533585cc89f3608a4682ccb173cc9bb940b2881c8d6f8fa0"
   license "BSD-3-Clause"
+  revision 1
 
   bottle do
     root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/kaito-tokyo-numpy@2.4.4-2.4.4"
@@ -25,7 +26,7 @@ class KaitoTokyoNumpyAT244 < Formula
 
   def install
     python = Formula["kaito-tokyo-python@3.11"]
-    python3 = python.opt_bin/"python3.11"
+    python3 = python.opt_libexec/"bin/python"
     args = %w[
       -Csetup-args=-Dblas=openblas
       -Csetup-args=-Dlapack=openblas
@@ -34,7 +35,7 @@ class KaitoTokyoNumpyAT244 < Formula
   end
 
   test do
-    python3 = Formula["kaito-tokyo-python@3.11"].opt_bin/"python3.11"
+    python3 = Formula["kaito-tokyo-python@3.11"].opt_libexec/"bin/python"
     system python3, "-c", <<~PYTHON
       import numpy as np
       t = np.ones((3,3), int)
