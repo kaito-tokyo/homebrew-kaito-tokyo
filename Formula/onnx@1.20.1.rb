@@ -7,6 +7,12 @@ class OnnxAT1201 < Formula
   revision 5
   compatibility_version 1
 
+  bottle do
+    root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/onnx@1.20.1-1.20.1_5"
+    sha256 cellar: :any,                 arm64_tahoe:  "6aa95f4a66b0f2f25f355b58cdaf981ee032f446b938b402523415cb20489be4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "6d775e8cbd60ae2f37e16e413f9e68c14876275ec5f51df1d9ea56dc65ee5a28"
+  end
+
   keg_only "not intended to be linked to the system"
 
   depends_on "cmake" => [:build, :test]
