@@ -3,11 +3,11 @@ name: brew pr-pull
 on:
   pull_request_target:
     types:
-      - labeled
+      - closed
 
 jobs:
   pr-pull:
-    if: contains(github.event.pull_request.labels.*.name, 'pr-pull')
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -30,15 +30,41 @@ jobs:
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
           PULL_REQUEST: ${{ github.event.pull_request.number }}
-        run: brew pr-pull --autosquash --debug --tap="$GITHUB_REPOSITORY" "$PULL_REQUEST"
+        run: brew pr-pull --debug --tap="${GITHUB_REPOSITORY}" --no-commit "${PULL_REQUEST}"
 
       - name: Push commits
-        uses: Homebrew/actions/git-try-push@fc695c54c2032716dd4cedd007489c8e32fc8a5d # main
-        with:
-          branch: main
-
-      - name: Delete branch
-        if: github.event.pull_request.head.repo.fork == false
         env:
-          BRANCH: ${{ github.event.pull_request.head.ref }}
-        run: git push --delete origin "$BRANCH"
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          FILE_PATH="$(git ls-files --modified)"
+
+          if ! [[ -f "${FILE_PATH}" ]]; then
+            echo "No changes detected."
+            exit 1
+          fi
+
+          FORMULA_NAME="$(basename "${FILE_PATH}" .rb)"
+          INFO_JSON="$(brew info --json=v2 "${FORMULA_NAME}")"
+
+          STABLE_VER="$(echo "${INFO_JSON}" | jq -r '.formulae[0].versions.stable')"
+          REVISION="$(echo "${INFO_JSON}" | jq -r '.formulae[0].revision')"
+
+          if [[ "${REVISION}" -gt 0 ]]; then
+            FULL_VER="${STABLE_VER}_${REVISION}"
+          else
+            FULL_VER="${STABLE_VER}"
+          fi
+
+          CURRENT_SHA=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            "repos/${GITHUB_REPOSITORY}/contents/${FILE_PATH}" --jq '.sha')
+          CONTENT_BASE64=$(base64 -w 0 "${FILE_PATH}")
+
+          gh api --method PUT "repos/${GITHUB_REPOSITORY}/contents/${FILE_PATH}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            -f message="${FORMULA_NAME}@${STABLE_VER}: add ${FULL_VER} bottle." \
+            -f content="${CONTENT_BASE64}" \
+            -f sha="${CURRENT_SHA}" \
+            -f branch="main"
