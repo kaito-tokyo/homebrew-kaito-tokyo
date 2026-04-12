@@ -5,6 +5,14 @@ class KaitoTokyoOnnxAT1201 < Formula
   sha256 "9bcd6473c689b1ac3aeba8df572891756e01c1a151ae788df5cbc7a4499e5db5"
   license "Apache-2.0"
 
+  bottle do
+    root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/kaito-tokyo-onnx@1.20.1-1.20.1"
+    sha256 cellar: :any,                 arm64_tahoe:   "e969ce506326ae473cd4cc9f98febdc184e35f2790f2533c9b1d002bba86953e"
+    sha256 cellar: :any,                 arm64_sequoia: "ff257d47667edab7cff3f2996054713dc4362f21c758b96a6d3c3cee1caccc05"
+    sha256 cellar: :any,                 arm64_sonoma:  "7cebaca569e88fdf0d254e8768e49771ba84de2bdaa78763ea00c92b52ad47db"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "465b583bc27406225359e3640e50113189dc74af5d08c5ba6dea694524960226"
+  end
+
   keg_only :versioned_formula
 
   depends_on "cmake" => [:build, :test]
