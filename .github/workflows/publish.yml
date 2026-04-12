@@ -3,11 +3,11 @@ name: brew pr-pull
 on:
   pull_request_target:
     types:
-      - labeled
+      - closed
 
 jobs:
   pr-pull:
-    if: contains(github.event.pull_request.labels.*.name, 'pr-pull')
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -30,7 +30,7 @@ jobs:
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
           PULL_REQUEST: ${{ github.event.pull_request.number }}
-        run: brew pr-pull --autosquash --debug --tap="$GITHUB_REPOSITORY" "$PULL_REQUEST"
+        run: brew pr-pull --debug --tap="$GITHUB_REPOSITORY" "$PULL_REQUEST"
 
       - name: Push commits
         uses: Homebrew/actions/git-try-push@fc695c54c2032716dd4cedd007489c8e32fc8a5d # main
