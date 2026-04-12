@@ -7,8 +7,10 @@ class ApacheArrowAT20 < Formula
 
   bottle do
     root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/apache-arrow@20-20.0.0"
-    sha256 cellar: :any, arm64_tahoe:  "588a4dce835ab1ed1762932f937ba2271d161c7ec1ce379c9e08df11cfa524a5"
-    sha256               x86_64_linux: "d708010c1383cf2b05914f63d11571c423ab0a941a608cee586dd408b4b5535b"
+    sha256 cellar: :any, arm64_tahoe:   "cccee08a0beeb05c66d15fcbf78e815bfa72cd0d286f2c3029805447cc99bc55"
+    sha256 cellar: :any, arm64_sequoia: "4bc2a9a2889ff28e461dd682a0f217716d9ab458841b0ff6b68dec092e96e500"
+    sha256 cellar: :any, arm64_sonoma:  "81447bf499c71a56143bfb7f957ede3bdb0b02c9f0549183ed283537da6562e8"
+    sha256               x86_64_linux:  "86dc2cb1f09cae9a4fc10f98c2e4fc46bbe849298e78612b6c142c515837f6ce"
   end
 
   keg_only :versioned_formula
