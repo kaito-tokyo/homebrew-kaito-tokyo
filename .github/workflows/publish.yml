@@ -30,60 +30,15 @@ jobs:
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
           PULL_REQUEST: ${{ github.event.pull_request.number }}
-        run: brew pr-pull --debug --tap="${GITHUB_REPOSITORY}" --no-commit "${PULL_REQUEST}"
+        run: brew pr-pull --debug --tap="$GITHUB_REPOSITORY" "$PULL_REQUEST"
 
       - name: Push commits
+        uses: Homebrew/actions/git-try-push@fc695c54c2032716dd4cedd007489c8e32fc8a5d # main
+        with:
+          branch: main
+
+      - name: Delete branch
+        if: github.event.pull_request.head.repo.fork == false
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          mapfile -t FILE_PATHS < <(git diff --name-only --diff-filter=M)
-
-          if [[ "${#FILE_PATHS[@]}" -eq 0 ]]; then
-            echo "No changes detected."
-            exit 0
-          fi
-
-          for FILE_PATH in "${FILE_PATHS[@]}"; do
-            if ! [[ -f "${FILE_PATH}" ]]; then
-              echo "Skipping non-file path: ${FILE_PATH}"
-              continue
-            fi
-
-            FORMULA_NAME="$(basename "${FILE_PATH}" .rb)"
-            INFO_JSON="$(brew info --json=v2 "${FORMULA_NAME}")"
-            STABLE_VER="$(echo "${INFO_JSON}" | jq -r '.formulae[0].versions.stable')"
-            REVISION="$(echo "${INFO_JSON}" | jq -r '.formulae[0].revision')"
-
-            if [[ "${REVISION}" -gt 0 ]]; then
-              FULL_VER="${STABLE_VER}_${REVISION}"
-            else
-              FULL_VER="${STABLE_VER}"
-            fi
-
-            CURRENT_SHA=$(gh api \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2026-03-10" \
-              "repos/${GITHUB_REPOSITORY}/contents/${FILE_PATH}" --jq '.sha')
-            CONTENT_BASE64=$(base64 -w 0 "${FILE_PATH}")
-
-            if ! CURRENT_SHA=$(gh api \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2026-03-10" \
-              "repos/${GITHUB_REPOSITORY}/contents/${FILE_PATH}" --jq '.sha'); then
-              echo "Failed to fetch current SHA for ${FILE_PATH}."
-              exit 1
-            fi
-
-            if [[ -z "${CURRENT_SHA}" ]]; then
-              echo "Fetched empty SHA for ${FILE_PATH}."
-              exit 1
-            fi
-
-            gh api --method PUT "repos/${GITHUB_REPOSITORY}/contents/${FILE_PATH}" \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2026-03-10" \
-              -f message="${FORMULA_NAME}@${STABLE_VER}: add ${FULL_VER} bottle." \
-              -f content="${CONTENT_BASE64}" \
-              -f sha="${CURRENT_SHA}" \
-              -f branch="main"
-          done
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: git push --delete origin "$BRANCH"
