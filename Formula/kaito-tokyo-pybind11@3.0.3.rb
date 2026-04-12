@@ -5,6 +5,14 @@ class KaitoTokyoPybind11AT303 < Formula
   sha256 "787459e1e186ee82001759508fefa408373eae8a076ffe0078b126c6f8f0ec5e"
   license "BSD-3-Clause"
 
+  bottle do
+    root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/kaito-tokyo-pybind11@3.0.3-3.0.3"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "c7d0ef454a6908cb593ee32a5c49b6de17824787b6cf6fc7d9f976bb156d6dd3"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "21e3a816c70086a26c3c3e95809777e801c4fb95fbf8c13a594ab72bc2a6a3da"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e6e3674d66790aeddd657203c1cc0c679a1fe1aff8b1a8e72191d75195ad1b0b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a7cc33bb6dca5db1e7d408a12e2c26afe71d5a90a3fe3e4e740863ae886b821f"
+  end
+
   keg_only :versioned_formula
 
   depends_on "cmake" => :build
