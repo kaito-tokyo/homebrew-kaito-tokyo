@@ -5,6 +5,13 @@ class KaitoTokyoPythonAT311 < Formula
   sha256 "f4de1b10bd6c70cbb9fa1cd71fc5038b832747a74ee59d599c69ce4846defb50"
   license "Python-2.0"
 
+  bottle do
+    root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/kaito-tokyo-python@3.11-3.11.15"
+    sha256 arm64_tahoe:  "8393c4b5ad7a915b1529a86906cecceca58ba4cba624275f256140f4cfff8bc7"
+    sha256 sequoia:      "d2d0d6775a8ed47b18e9f55dfb332d264cc6fb1bb6b053d18412d98fbb7c20f6"
+    sha256 x86_64_linux: "f2426c40a7aa6a0cedbed2743b8ccfd93197334304abafe5ff0df0961f5e74c4"
+  end
+
   # setuptools remembers the build flags python is built with and uses them to
   # build packages later. Xcode-only systems need different flags.
   pour_bottle? only_if: :clt_installed
