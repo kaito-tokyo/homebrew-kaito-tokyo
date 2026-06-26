@@ -5,6 +5,13 @@ class MumbleServer < Formula
   sha256 "63a28011e37e7f05844d81b99a2ba8a4884748e6231ee1931da38f357e3a9c8c"
   license "BSD-3-Clause"
 
+  bottle do
+    root_url "https://github.com/kaito-tokyo/homebrew-kaito-tokyo/releases/download/mumble-server-1.6.870"
+    sha256 cellar: :any, arm64_tahoe:   "1e244032404cd81f3cfe7a56453762462302fac9d7f8a50a99e21665b5fd302f"
+    sha256 cellar: :any, arm64_sequoia: "5bada4d91d9e330576fe8348c0e0cdf31d31fc799cd2dd90ddb6aad24ec0d4ed"
+    sha256 cellar: :any, arm64_sonoma:  "c488288558d402ed574041ce3b7ec0125d3dd3b5b8012a5ce1ec50898e39c1a9"
+  end
+
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
   depends_on "abseil"
