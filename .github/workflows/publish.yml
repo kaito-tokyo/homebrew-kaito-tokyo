@@ -44,7 +44,7 @@ jobs:
         run: brew pr-pull --clean --debug --no-cherry-pick --tap="${GITHUB_REPOSITORY}" "${PULL_REQUEST}"
 
       - name: Push commits
-        uses: Homebrew/actions/git-try-push@841d750a0ed9262d3c3ca31f2173974696bc261a # main
+        uses: Homebrew/actions/git-try-push@18fcb8e3e06b4247c676c506750dc95ea7226479 # main
         with:
           branch: main
 
