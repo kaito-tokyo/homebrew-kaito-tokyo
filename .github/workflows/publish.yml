@@ -22,7 +22,7 @@ jobs:
           token: ${{ github.token }}
 
       - name: Set up git
-        uses: Homebrew/actions/git-user-config@841d750a0ed9262d3c3ca31f2173974696bc261a # main
+        uses: Homebrew/actions/git-user-config@18fcb8e3e06b4247c676c506750dc95ea7226479 # main
         with:
           username: github-actions[bot]
 
