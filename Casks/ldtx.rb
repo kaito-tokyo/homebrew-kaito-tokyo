@@ -1,6 +1,6 @@
 cask "ldtx" do
-  version "0.2.16"
-  sha256 "d319cdb351ca64cc67b3048dc733715812a1f855ad6807c8dabcd27d14003735"
+  version "0.2.17"
+  sha256 "5812607dc3f7834cc708ec051f2394a6badcc8e1c0fb13724e1af8968a0cb14c"
 
   url "https://github.com/kaito-tokyo/LDTX/releases/download/v#{version}/LDTX-v#{version}.dmg"
   name "LDTX"
